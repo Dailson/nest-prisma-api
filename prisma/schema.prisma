@@ -12,3 +12,10 @@ datasource db {
   provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
+
+model tb_user {
+  id       Int    @id @default(autoincrement())
+  name     String @db.VarChar(255)
+  email    String @unique
+  password String @db.VarChar(255)
+}

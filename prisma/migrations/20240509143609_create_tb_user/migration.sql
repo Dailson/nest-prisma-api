@@ -1,0 +1,26 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- CreateTable
+CREATE TABLE [dbo].[tb_user] (
+    [id] INT NOT NULL IDENTITY(1,1),
+    [name] VARCHAR(255) NOT NULL,
+    [email] NVARCHAR(1000) NOT NULL,
+    [password] VARCHAR(255) NOT NULL,
+    CONSTRAINT [tb_user_pkey] PRIMARY KEY CLUSTERED ([id]),
+    CONSTRAINT [tb_user_email_key] UNIQUE NONCLUSTERED ([email])
+);
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH
