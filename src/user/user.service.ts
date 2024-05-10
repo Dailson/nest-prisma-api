@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../database/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { UserCreateDTO } from './dto/user-create.dto';
 import { UserUpdateDTO } from './dto/user-update.dto';
 import { User } from './entity/user.entity';
@@ -18,7 +18,7 @@ export class UserService {
 
   async findOneById(userId: number): Promise<User> {
     return this.prisma.user
-      .findUniqueOrThrow({ where: { id: userId } })
+      .findUnique({ where: { id: userId } })
       .catch((error) => {
         console.error(error);
         throw new NotFoundException();
@@ -27,7 +27,7 @@ export class UserService {
 
   async findOneByEmail(userEmail: string): Promise<User> {
     return await this.prisma.user
-      .findUniqueOrThrow({
+      .findUnique({
         where: { email: userEmail },
       })
       .catch((error) => {
@@ -38,7 +38,7 @@ export class UserService {
 
   async update(userId: number, userUpdateDTO: UserUpdateDTO) {
     this.findOneById(userId);
-    return this.prisma.user.update({
+    await this.prisma.user.update({
       where: {
         id: userId,
       },
@@ -50,7 +50,7 @@ export class UserService {
     this.findOneById(userId);
     await this.prisma.user.delete({
       where: {
-        id: userId,
+        id: Number(userId),
       },
     });
   }
