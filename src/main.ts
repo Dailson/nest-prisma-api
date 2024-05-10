@@ -1,11 +1,16 @@
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { HandlerExceptionFilter } from './handler-exception/handler-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new HandlerExceptionFilter(httpAdapter));
+
+  // Validation and Transformation
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true, // Convert the requet to the approriate object
