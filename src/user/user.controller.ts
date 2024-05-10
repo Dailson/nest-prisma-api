@@ -42,7 +42,7 @@ export class UserController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, userUpdateDTO: UserUpdateDTO) {
+  async update(@Param('id') id: number, @Body() userUpdateDTO: UserUpdateDTO) {
     return this.userService.update(id, userUpdateDTO);
   }
 
