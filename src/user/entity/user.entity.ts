@@ -1,7 +1,7 @@
 import { AutoMap } from '@automapper/classes';
-import { Prisma } from '@prisma/client';
+import { User } from '@prisma/client';
 
-export class User implements Prisma.UserCreateInput {
+export class UserEntity implements User {
   @AutoMap()
   id: number;
 

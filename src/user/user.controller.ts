@@ -21,7 +21,7 @@ import {
 import { UserCreateDTO } from './dto/user-create.dto';
 import { UserReadDTO } from './dto/user-read.dto';
 import { UserUpdateDTO } from './dto/user-update.dto';
-import { User } from './entity/user.entity';
+import { UserEntity } from './entity/user.entity';
 import { UserService } from './user.service';
 
 @ApiTags('User')
@@ -46,7 +46,7 @@ export class UserController {
   @ApiOkResponse({ type: UserReadDTO, isArray: true })
   async findAll(): Promise<UserReadDTO[] | undefined[]> {
     const usersFound = await this.userService.findAll();
-    return this.userMapper.mapArrayAsync(usersFound, User, UserReadDTO);
+    return this.userMapper.mapArrayAsync(usersFound, UserEntity, UserReadDTO);
   }
 
   @Get(':id')
@@ -54,7 +54,7 @@ export class UserController {
   @ApiOkResponse({ type: UserReadDTO })
   async findOneById(@Param('id') id: number): Promise<UserReadDTO> {
     const userFound = await this.userService.findOneById(id);
-    return this.userMapper.mapAsync(userFound, User, UserReadDTO);
+    return this.userMapper.mapAsync(userFound, UserEntity, UserReadDTO);
   }
 
   @Patch(':id')
