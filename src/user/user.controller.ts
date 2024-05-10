@@ -16,6 +16,7 @@ import {
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiTags,
 } from '@nestjs/swagger';
 import { UserCreateDTO } from './dto/user-create.dto';
 import { UserReadDTO } from './dto/user-read.dto';
@@ -23,6 +24,7 @@ import { UserUpdateDTO } from './dto/user-update.dto';
 import { User } from './entity/user.entity';
 import { UserService } from './user.service';
 
+@ApiTags('User')
 @Controller({ path: 'users' })
 export class UserController {
   constructor(
