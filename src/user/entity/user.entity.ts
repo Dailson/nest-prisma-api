@@ -9,6 +9,9 @@ export class UserEntity implements User {
   name: string;
 
   @AutoMap()
+  last_name: string;
+
+  @AutoMap()
   email: string;
 
   password: string;

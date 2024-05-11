@@ -8,7 +8,7 @@ export class UserReadDTO {
 
   @ApiProperty()
   @AutoMap()
-  name: string;
+  fullName: string;
 
   @ApiProperty()
   @AutoMap()

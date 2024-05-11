@@ -5,21 +5,31 @@ const prisma = new PrismaClient();
 async function main() {
   const userAdmin = await prisma.user.upsert({
     where: { id: 1 },
-    update: {},
+    update: {
+      last_name: 'De Oliveira',
+      name: 'Francisco',
+      email: 'francisco.oliveira@mail.com',
+    },
     create: {
-      name: 'ADMIN',
-      email: 'admin@mail.com',
-      password: 'Admin@123',
+      name: 'Francisco',
+      email: 'francisco.oliveira@mail.com',
+      password: 'Foliveira@123',
+      last_name: 'De Oliveira',
     },
   });
 
   const simpleUser = await prisma.user.upsert({
     where: { id: 2 },
-    update: {},
+    update: {
+      last_name: 'Ribeiro',
+      name: 'Luiz',
+      email: 'luiz.ribeiro@mail.com',
+    },
     create: {
-      name: 'USER',
-      email: 'user@mail.com',
-      password: 'User@123',
+      name: 'Luiz',
+      email: 'luiz.ribeiro@mail.com',
+      password: 'Lribeiro@123',
+      last_name: 'Ribeiro',
     },
   });
 
