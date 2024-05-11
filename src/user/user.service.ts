@@ -17,17 +17,16 @@ export class UserService {
   }
 
   async findOneById(userId: number): Promise<UserEntity> {
-    return this.prisma.user
-      .findUnique({ where: { id: userId } })
-      .catch((error) => {
-        console.error(error);
+    return await this.prisma.user
+      .findUniqueOrThrow({ where: { id: userId } })
+      .catch(() => {
         throw new NotFoundException();
       });
   }
 
   async findOneByEmail(userEmail: string): Promise<UserEntity> {
     return await this.prisma.user
-      .findUnique({
+      .findUniqueOrThrow({
         where: { email: userEmail },
       })
       .catch((error) => {
@@ -47,10 +46,10 @@ export class UserService {
   }
 
   async delete(userId: number) {
-    this.findOneById(userId);
+    await this.findOneById(userId);
     await this.prisma.user.delete({
       where: {
-        id: Number(userId),
+        id: userId,
       },
     });
   }

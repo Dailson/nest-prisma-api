@@ -70,6 +70,6 @@ export class UserController {
   @ApiNoContentResponse()
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: number) {
-    this.userService.delete(id);
+    await this.userService.delete(id);
   }
 }
