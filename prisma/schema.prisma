@@ -14,10 +14,25 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String @db.VarChar(255)
-  email    String @unique @db.VarChar(255)
-  password String @db.VarChar(255)
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(255)
+  email    String    @unique @db.VarChar(255)
+  password String    @db.VarChar(255)
+  articles Article[]
 
   @@map("tb_user")
+}
+
+model Article {
+  id           Int      @id @default(autoincrement())
+  title        String   @unique @db.VarChar(255)
+  description  String?  @db.VarChar(255)
+  body         String
+  is_published Boolean  @default(false) @db.Bit
+  author       User?    @relation(fields: [author_id], references: [id])
+  author_id    Int?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  @@map("tb_article")
 }
