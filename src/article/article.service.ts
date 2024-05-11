@@ -13,7 +13,11 @@ export class ArticleService {
   }
 
   async findAll(): Promise<Article[] | undefined[]> {
-    return await this.prisma.article.findMany();
+    return await this.prisma.article.findMany({
+      include: {
+        author: true,
+      },
+    });
   }
 
   async findOneById(articleId: number): Promise<Article> {
@@ -21,6 +25,9 @@ export class ArticleService {
       .findFirstOrThrow({
         where: {
           id: articleId,
+        },
+        include: {
+          author: true,
         },
       })
       .catch((error) => {

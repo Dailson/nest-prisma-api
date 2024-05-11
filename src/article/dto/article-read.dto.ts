@@ -1,5 +1,6 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserReadDTO } from '../../user/dto/user-read.dto';
 
 export class ArticleReadDTO {
   @ApiProperty()
@@ -33,4 +34,8 @@ export class ArticleReadDTO {
   @ApiProperty()
   @AutoMap()
   updated_at: Date;
+
+  @ApiProperty()
+  @AutoMap(() => [UserReadDTO])
+  author: UserReadDTO;
 }
