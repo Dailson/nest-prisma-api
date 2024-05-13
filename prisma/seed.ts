@@ -10,11 +10,13 @@ async function main() {
       last_name: 'De Oliveira',
       name: 'Francisco',
       email: 'francisco.oliveira@mail.com',
+      role: 'ADMIN',
       password: await bcrypt.hash('Foliveira@123', await bcrypt.genSalt(10)),
     },
     create: {
       name: 'Francisco',
       email: 'francisco.oliveira@mail.com',
+      role: 'ADMIN',
       password: await bcrypt.hash('Foliveira@123', await bcrypt.genSalt(10)),
       last_name: 'De Oliveira',
     },
@@ -25,11 +27,13 @@ async function main() {
     update: {
       last_name: 'Ribeiro',
       name: 'Luiz',
+      role: 'USER',
       email: 'luiz.ribeiro@mail.com',
       password: await bcrypt.hash('Lribeiro@123', await bcrypt.genSalt(10)),
     },
     create: {
       name: 'Luiz',
+      role: 'USER',
       email: 'luiz.ribeiro@mail.com',
       password: await bcrypt.hash('Lribeiro@123', await bcrypt.genSalt(10)),
       last_name: 'Ribeiro',

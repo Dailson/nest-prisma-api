@@ -14,5 +14,8 @@ export class UserEntity implements User {
   @AutoMap()
   email: string;
 
+  @AutoMap()
+  role: string;
+
   password: string;
 }

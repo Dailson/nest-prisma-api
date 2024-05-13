@@ -19,6 +19,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { Roles } from '../auth/decorator/role.decorator';
 import { UserCreateDTO } from './dto/user-create.dto';
 import { UserReadDTO } from './dto/user-read.dto';
 import { UserUpdateDTO } from './dto/user-update.dto';
@@ -75,6 +76,7 @@ export class UserController {
   @ApiNoContentResponse()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
+  @Roles('ADMIN')
   async delete(@Param('id') id: number) {
     await this.userService.delete(id);
   }
