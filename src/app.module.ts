@@ -1,8 +1,10 @@
 import { classes } from '@automapper/classes';
 import { AutomapperModule } from '@automapper/nestjs';
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ArticleModule } from './article/article.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtAuthGuard } from './auth/guard/jwt.guard';
 import { UserModule } from './user/user.module';
 @Module({
   imports: [
@@ -15,6 +17,11 @@ import { UserModule } from './user/user.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}
