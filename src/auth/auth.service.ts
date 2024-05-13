@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
 import { AuthEntity } from './entity/auth.entity';
 
@@ -15,7 +16,7 @@ export class AuthService {
     const user = await this.userService.findOneByEmail(email);
 
     // Second Step: Verity if the password is correct
-    const isPasswordValid = user.password === password;
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     // If password dos not match, throw an erro
     if (!isPasswordValid) {

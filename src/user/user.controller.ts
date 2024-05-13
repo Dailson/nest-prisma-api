@@ -20,7 +20,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtGuard } from '../auth/guard/jwt.guard';
+import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { UserCreateDTO } from './dto/user-create.dto';
 import { UserReadDTO } from './dto/user-read.dto';
 import { UserUpdateDTO } from './dto/user-update.dto';
@@ -40,7 +40,7 @@ export class UserController {
   @Post()
   @ApiOperation({ summary: 'Creates a single User' })
   @ApiCreatedResponse({ type: UserCreateDTO })
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async create(@Body() userCreateDTO: UserCreateDTO) {
     await this.userService.create(userCreateDTO);
@@ -49,7 +49,7 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: 'Returns an array of Users' })
   @ApiOkResponse({ type: UserReadDTO, isArray: true })
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async findAll(): Promise<UserReadDTO[] | undefined[]> {
     const usersFound = await this.userService.findAll();
@@ -59,7 +59,7 @@ export class UserController {
   @Get(':id')
   @ApiOperation({ summary: 'Returns a single User' })
   @ApiOkResponse({ type: UserReadDTO })
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async findOneById(@Param('id') id: number): Promise<UserReadDTO> {
     const userFound = await this.userService.findOneById(id);
@@ -70,7 +70,7 @@ export class UserController {
   @ApiOperation({ summary: 'Updates a single User' })
   @ApiNoContentResponse()
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async update(@Param('id') id: number, @Body() userUpdateDTO: UserUpdateDTO) {
     this.userService.update(id, userUpdateDTO);
@@ -80,7 +80,7 @@ export class UserController {
   @ApiOperation({ summary: 'Deletes a single User' })
   @ApiNoContentResponse()
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async delete(@Param('id') id: number) {
     await this.userService.delete(id);
