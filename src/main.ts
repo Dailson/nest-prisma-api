@@ -24,6 +24,7 @@ async function bootstrap() {
     .setTitle('NestJS API with Prisma')
     .setDescription('Test API')
     .setVersion('0.1')
+    .addBearerAuth()
     .addServer('/api/v1')
     .build();
 

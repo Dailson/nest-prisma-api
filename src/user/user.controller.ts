@@ -10,14 +10,17 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtGuard } from '../auth/guard/jwt.guard';
 import { UserCreateDTO } from './dto/user-create.dto';
 import { UserReadDTO } from './dto/user-read.dto';
 import { UserUpdateDTO } from './dto/user-update.dto';
@@ -37,6 +40,8 @@ export class UserController {
   @Post()
   @ApiOperation({ summary: 'Creates a single User' })
   @ApiCreatedResponse({ type: UserCreateDTO })
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   async create(@Body() userCreateDTO: UserCreateDTO) {
     await this.userService.create(userCreateDTO);
   }
@@ -44,6 +49,8 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: 'Returns an array of Users' })
   @ApiOkResponse({ type: UserReadDTO, isArray: true })
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   async findAll(): Promise<UserReadDTO[] | undefined[]> {
     const usersFound = await this.userService.findAll();
     return this.userMapper.mapArrayAsync(usersFound, UserEntity, UserReadDTO);
@@ -52,6 +59,8 @@ export class UserController {
   @Get(':id')
   @ApiOperation({ summary: 'Returns a single User' })
   @ApiOkResponse({ type: UserReadDTO })
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   async findOneById(@Param('id') id: number): Promise<UserReadDTO> {
     const userFound = await this.userService.findOneById(id);
     return this.userMapper.mapAsync(userFound, UserEntity, UserReadDTO);
@@ -61,6 +70,8 @@ export class UserController {
   @ApiOperation({ summary: 'Updates a single User' })
   @ApiNoContentResponse()
   @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   async update(@Param('id') id: number, @Body() userUpdateDTO: UserUpdateDTO) {
     this.userService.update(id, userUpdateDTO);
   }
@@ -69,6 +80,8 @@ export class UserController {
   @ApiOperation({ summary: 'Deletes a single User' })
   @ApiNoContentResponse()
   @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   async delete(@Param('id') id: number) {
     await this.userService.delete(id);
   }
