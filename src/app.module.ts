@@ -6,6 +6,7 @@ import { ArticleModule } from './article/article.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guard/jwt.guard';
 import { RolesGuard } from './auth/guard/role.guard';
+import { FileModule } from './file/file.module';
 import { UserModule } from './user/user.module';
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UserModule } from './user/user.module';
     UserModule,
     ArticleModule,
     AuthModule,
+    FileModule,
   ],
   controllers: [],
   providers: [

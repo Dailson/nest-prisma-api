@@ -1,24 +1,22 @@
 import { AutoMap } from '@automapper/classes';
 import { User } from '@prisma/client';
 
-export class UserEntity implements User {
+export class FileReadDTO {
   @AutoMap()
   id: number;
 
   @AutoMap()
-  name: string;
+  fileName: string;
 
   @AutoMap()
-  last_name: string;
+  contentLength: number;
 
   @AutoMap()
-  email: string;
+  contentType: string;
 
   @AutoMap()
-  role: string;
+  url: string;
 
   @AutoMap()
-  photo_url: string;
-
-  password: string;
+  user: User;
 }

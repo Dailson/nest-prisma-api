@@ -11,9 +11,9 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/login')
+  @Public()
   @ApiOperation({ summary: 'Authenticate a user' })
   @ApiOkResponse({ type: AuthEntity })
-  @Public()
   async login(@Body() loginDTO: LoginRequestDTO): Promise<AuthEntity> {
     return await this.authService.login(loginDTO.email, loginDTO.password);
   }

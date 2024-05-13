@@ -20,7 +20,9 @@ model User {
   email     String    @unique @db.VarChar(255)
   password  String    @db.VarChar(255)
   role      String    @default("USER") @db.VarChar(255)
+  photo_url String?
   articles  Article[]
+  File      File[]
 
   @@map("tb_user")
 }
@@ -37,4 +39,18 @@ model Article {
   updated_at   DateTime @updatedAt
 
   @@map("tb_article")
+}
+
+model File {
+  id             Int      @id @default(autoincrement()) 
+  file_name      String   @unique @db.VarChar(255)
+  content_length Int
+  content_type   String
+  url            String
+  user           User     @relation(fields: [user_id], references: [id])
+  user_id        Int
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  @@map("tb_file")
 }
