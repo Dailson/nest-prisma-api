@@ -10,6 +10,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -17,14 +18,16 @@ import {
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { Roles } from '../auth/decorator/role.decorator';
-import { UserCreateDTO } from './dto/user-create.dto';
-import { UserReadDTO } from './dto/user-read.dto';
-import { UserUpdateDTO } from './dto/user-update.dto';
-import { UserEntity } from './entity/user.entity';
-import { UserService } from './user.service';
+import { Roles } from '../../auth/decorator/role.decorator';
+import { PageResponseDTO } from '../dto/page-response.dto';
+import { UserCreateDTO } from '../dto/user-create.dto';
+import { UserReadDTO } from '../dto/user-read.dto';
+import { UserUpdateDTO } from '../dto/user-update.dto';
+import { UserEntity } from '../entity/user.entity';
+import { UserService } from '../service/user.service';
 
 @ApiTags('User')
 @Controller({ path: 'users' })
@@ -41,6 +44,11 @@ export class UserController {
   @ApiCreatedResponse({ type: UserCreateDTO })
   @ApiBearerAuth()
   async create(@Body() userCreateDTO: UserCreateDTO) {
+    // const user = this.userMapper.mapAsync(
+    //   userCreateDTO,
+    //   UserCreateDTO,
+    //   UserEntity,
+    // );
     await this.userService.create(userCreateDTO);
   }
 
@@ -48,17 +56,33 @@ export class UserController {
   @ApiOperation({ summary: 'Returns an array of Users' })
   @ApiOkResponse({ type: UserReadDTO, isArray: true })
   @ApiBearerAuth()
-  async findAll(): Promise<UserReadDTO[] | undefined[]> {
-    const usersFound = await this.userService.findAll();
+  async fetchAll(): Promise<UserReadDTO[] | undefined[]> {
+    const usersFound = await this.userService.fetchAll();
     return this.userMapper.mapArrayAsync(usersFound, UserEntity, UserReadDTO);
+  }
+
+  @Get('/paged')
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'size', required: false, type: Number })
+  async fetchAllPaged(
+    @Query('page') page?: number,
+    @Query('size') size?: number,
+  ): Promise<PageResponseDTO<UserReadDTO>> {
+    const pageResult = this.userService.fetchAllPaged(page, size);
+    const mappedContent = await this.userMapper.mapArrayAsync(
+      (await pageResult).content,
+      UserEntity,
+      UserReadDTO,
+    );
+    return this.mapContent(pageResult, mappedContent);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Returns a single User' })
   @ApiOkResponse({ type: UserReadDTO })
   @ApiBearerAuth()
-  async findOneById(@Param('id') id: number): Promise<UserReadDTO> {
-    const userFound = await this.userService.findOneById(id);
+  async fetchById(@Param('id') id: number): Promise<UserReadDTO> {
+    const userFound = await this.userService.fetchById(id);
     return this.userMapper.mapAsync(userFound, UserEntity, UserReadDTO);
   }
 
@@ -79,5 +103,19 @@ export class UserController {
   @Roles('ADMIN')
   async delete(@Param('id') id: number) {
     await this.userService.delete(id);
+  }
+
+  private async mapContent(
+    pageResult: Promise<PageResponseDTO<UserEntity>>,
+    userReadDTO: UserReadDTO[],
+  ) {
+    return new PageResponseDTO<UserReadDTO>(
+      (await pageResult).page,
+      (await pageResult).size,
+      (await pageResult).totalPages,
+      (await pageResult).totalItems,
+      (await pageResult).last,
+      userReadDTO,
+    );
   }
 }

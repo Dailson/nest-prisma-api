@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserService } from '../user/user.service';
+import { UserService } from '../user/service/user.service';
 import { AuthEntity } from './entity/auth.entity';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<AuthEntity> {
     // First Step: Find a single user with the given email. If no user is found, throw a NotFoundException
-    const user = await this.userService.findOneByEmail(email);
+    const user = await this.userService.fetchByEmail(email);
 
     // Second Step: Verity if the password is correct
     const isPasswordValid = await bcrypt.compare(password, user.password);

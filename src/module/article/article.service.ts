@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Article } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../config/prisma/prisma.service';
 import { ArticleCreateDTO } from './dto/article-create.dto';
 import { ArticleUpdateDTO } from './dto/article-update.dto';
 
@@ -9,7 +9,9 @@ export class ArticleService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(articleCreateDTO: ArticleCreateDTO): Promise<void> {
-    await this.prisma.article.create({ data: articleCreateDTO });
+    await this.prisma.$transaction([
+      this.prisma.article.create({ data: articleCreateDTO }),
+    ]);
   }
 
   async findAll(): Promise<Article[] | undefined[]> {
@@ -40,12 +42,14 @@ export class ArticleService {
     articleUpdateDTO: ArticleUpdateDTO,
   ): Promise<void> {
     await this.findOneById(articleId);
-    await this.prisma.article.update({
-      where: {
-        id: articleId,
-      },
-      data: articleUpdateDTO,
-    });
+    await this.prisma.$transaction([
+      this.prisma.article.update({
+        where: {
+          id: articleId,
+        },
+        data: articleUpdateDTO,
+      }),
+    ]);
   }
 
   async delete(articleId: number): Promise<void> {

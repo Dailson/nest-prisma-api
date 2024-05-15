@@ -29,13 +29,13 @@ export class UserProfile extends AutomapperProfile {
           mapFrom((source) => source.name + ' ' + source.last_name),
         ),
       );
-      createMap(mapper, UserCreateDTO, UserEntity);
       createMap(
         mapper,
         UserUpdateDTO,
         UserEntity,
         forMember((destination) => destination.password, ignore()),
       );
+      createMap(mapper, UserCreateDTO, UserEntity);
     };
   }
 }

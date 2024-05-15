@@ -2,7 +2,7 @@ import { diskStorage } from 'multer';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-const multerConfig = {
+const fileMulterConfig = {
   storage: diskStorage({
     destination: process.env.UPLOADED_FILES_DESTINATION,
     filename: (req, file, cb) => {
@@ -15,4 +15,4 @@ const multerConfig = {
   }),
 };
 
-export default multerConfig;
+export default fileMulterConfig;
