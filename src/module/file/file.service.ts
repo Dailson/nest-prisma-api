@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { PrismaService } from '../../config/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { FileEntity } from './entity/file.entity';
 
 @Injectable()

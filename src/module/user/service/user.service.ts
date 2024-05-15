@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { genSalt, hashSync } from 'bcrypt';
-import { PrismaService } from '../../../config/prisma/prisma.service';
+import { PrismaService } from '../../../prisma/prisma.service';
 import { PageResponseDTO } from '../dto/page-response.dto';
-import { UserCreateDTO } from '../dto/user-create.dto';
-import { UserUpdateDTO } from '../dto/user-update.dto';
 import { UserEntity } from '../entity/user.entity';
 import { UserRepository } from '../repository/user.repository';
 
@@ -14,7 +12,7 @@ export class UserService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async create(userEntity: UserCreateDTO): Promise<void> {
+  async create(userEntity: UserEntity): Promise<void> {
     userEntity.password = await this.hashPassword(userEntity.password);
     this.userRepository.create(userEntity);
   }
@@ -38,8 +36,8 @@ export class UserService {
     return await this.userRepository.fetchAllPaged(page, size);
   }
 
-  async update(userId: number, userUpdateDTO: UserUpdateDTO) {
-    return await this.userRepository.update(userId, userUpdateDTO);
+  async update(userId: number, userEntity: UserEntity) {
+    return await this.userRepository.update(userId, userEntity);
   }
 
   async delete(userId: number) {

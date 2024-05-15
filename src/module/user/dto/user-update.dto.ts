@@ -1,7 +1,17 @@
-import { OmitType } from '@nestjs/swagger';
-import { UserCreateDTO } from './user-create.dto';
+import { AutoMap } from '@automapper/classes';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 
-export class UserUpdateDTO extends OmitType(UserCreateDTO, [
-  'email',
-  'password',
-]) {}
+export class UserUpdateDTO {
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @AutoMap()
+  name: string;
+
+  @ApiProperty()
+  @IsEmail()
+  @IsOptional()
+  @AutoMap()
+  last_name: string;
+}

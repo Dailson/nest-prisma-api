@@ -20,5 +20,6 @@ export class UserEntity implements User {
   @AutoMap()
   photo_url: string;
 
+  @AutoMap()
   password: string;
 }

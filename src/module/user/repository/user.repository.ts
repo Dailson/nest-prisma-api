@@ -1,18 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../../config/prisma/prisma.service';
+import { Page } from '../../../const/page-constant';
+import { PrismaService } from '../../../prisma/prisma.service';
 import { PageResponseDTO } from '../dto/page-response.dto';
-import { UserCreateDTO } from '../dto/user-create.dto';
-import { UserUpdateDTO } from '../dto/user-update.dto';
 import { UserEntity } from '../entity/user.entity';
-
-const DEFAULT_PAGE = 1;
-const DEFAULT_PAGE_SIZE = 10;
 
 @Injectable()
 export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userEntity: UserCreateDTO): Promise<void> {
+  async create(userEntity: UserEntity): Promise<void> {
     await this.prisma.$transaction([
       this.prisma.user.create({ data: userEntity }),
     ]);
@@ -45,10 +41,10 @@ export class UserRepository {
     size?: number,
   ): Promise<PageResponseDTO<UserEntity>> {
     if (Number.isNaN(page)) {
-      page = DEFAULT_PAGE;
+      page = Page.DEFAULT_PAGE;
     }
     if (Number.isNaN(size)) {
-      size = DEFAULT_PAGE_SIZE;
+      size = Page.DEFAULT_PAGE_SIZE;
     }
 
     const content = await this.prisma.user.findMany({
@@ -72,14 +68,14 @@ export class UserRepository {
     );
   }
 
-  async update(userId: number, userUpdateDTO: UserUpdateDTO) {
+  async update(userId: number, userEntity: UserEntity) {
     this.fetchById(userId);
     await this.prisma.$transaction([
       this.prisma.user.update({
         where: {
           id: userId,
         },
-        data: userUpdateDTO,
+        data: userEntity,
       }),
     ]);
   }

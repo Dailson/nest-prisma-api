@@ -33,7 +33,9 @@ export class UserProfile extends AutomapperProfile {
         mapper,
         UserUpdateDTO,
         UserEntity,
+        forMember((destination) => destination.id, ignore()),
         forMember((destination) => destination.password, ignore()),
+        forMember((destination) => destination.email, ignore()),
       );
       createMap(mapper, UserCreateDTO, UserEntity);
     };

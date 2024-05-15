@@ -44,12 +44,12 @@ export class UserController {
   @ApiCreatedResponse({ type: UserCreateDTO })
   @ApiBearerAuth()
   async create(@Body() userCreateDTO: UserCreateDTO) {
-    // const user = this.userMapper.mapAsync(
-    //   userCreateDTO,
-    //   UserCreateDTO,
-    //   UserEntity,
-    // );
-    await this.userService.create(userCreateDTO);
+    const userEntity: UserEntity = await this.userMapper.mapAsync(
+      userCreateDTO,
+      UserCreateDTO,
+      UserEntity,
+    );
+    await this.userService.create(userEntity);
   }
 
   @Get()
@@ -92,7 +92,12 @@ export class UserController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
   async update(@Param('id') id: number, @Body() userUpdateDTO: UserUpdateDTO) {
-    this.userService.update(id, userUpdateDTO);
+    const userEntityToUpdate: UserEntity = await this.userMapper.mapAsync(
+      userUpdateDTO,
+      UserUpdateDTO,
+      UserEntity,
+    );
+    this.userService.update(id, userEntityToUpdate);
   }
 
   @Delete(':id')

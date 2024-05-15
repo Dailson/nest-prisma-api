@@ -1,7 +1,7 @@
 import { UseInterceptors, applyDecorators } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
-import fileMulterConfig from '../config/storage/file-multer.config';
+import fileMulterConfig from '../config/file-multer.config';
 
 export function FileUpload() {
   return applyDecorators(

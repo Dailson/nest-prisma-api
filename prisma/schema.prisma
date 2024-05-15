@@ -42,7 +42,7 @@ model Article {
 }
 
 model File {
-  id             Int      @id @default(autoincrement()) 
+  id             Int      @id @default(autoincrement())
   file_name      String   @unique @db.VarChar(255)
   content_length Int
   content_type   String
