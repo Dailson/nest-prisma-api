@@ -6,10 +6,7 @@ export class UserEntity implements User {
   id: number;
 
   @AutoMap()
-  name: string;
-
-  @AutoMap()
-  last_name: string;
+  fullName: string;
 
   @AutoMap()
   email: string;
@@ -18,7 +15,7 @@ export class UserEntity implements User {
   role: string;
 
   @AutoMap()
-  photo_url: string;
+  pictureUrl: string;
 
   @AutoMap()
   password: string;

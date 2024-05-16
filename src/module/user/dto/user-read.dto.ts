@@ -13,4 +13,8 @@ export class UserReadDTO {
   @ApiProperty()
   @AutoMap()
   email: string;
+
+  @ApiProperty()
+  @AutoMap()
+  pictureUrl: string;
 }

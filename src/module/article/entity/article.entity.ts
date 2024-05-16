@@ -16,17 +16,17 @@ export class ArticleEntity implements Article {
   body: string;
 
   @AutoMap()
-  is_published: boolean;
+  isPublished: boolean;
 
   @AutoMap()
-  author_id: number;
+  authorId: number;
 
   @AutoMap(() => [UserEntity])
   author: UserEntity;
 
   @AutoMap()
-  created_at: Date;
+  createdAt: Date;
 
   @AutoMap()
-  updated_at: Date;
+  updatedAt: Date;
 }

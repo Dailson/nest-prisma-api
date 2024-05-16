@@ -17,9 +17,9 @@ export class ArticleCreateDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsBoolean()
-  is_published: boolean;
+  isPublished: boolean;
 
   @IsNotEmpty()
   @IsNumber()
-  author_id: number;
+  authorId: number;
 }

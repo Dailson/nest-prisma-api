@@ -11,6 +11,9 @@ import {
   Patch,
   Post,
   Query,
+  Request,
+  Res,
+  UploadedFile,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -21,6 +24,9 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { Response } from 'express';
+import { FileDownload } from '../../../decorator/file-download.decorator';
+import { FileUpload } from '../../../decorator/file-upload.decorator';
 import { Roles } from '../../auth/decorator/role.decorator';
 import { PageResponseDTO } from '../dto/page-response.dto';
 import { UserCreateDTO } from '../dto/user-create.dto';
@@ -33,10 +39,9 @@ import { UserService } from '../service/user.service';
 @Controller({ path: 'users' })
 export class UserController {
   constructor(
-    private readonly userService: UserService,
-
     @InjectMapper()
     private readonly userMapper: Mapper,
+    private readonly userService: UserService,
   ) {}
 
   @Post()
@@ -108,6 +113,34 @@ export class UserController {
   @Roles('ADMIN')
   async delete(@Param('id') id: number) {
     await this.userService.delete(id);
+  }
+
+  @Post('/photo-upload')
+  @ApiBearerAuth()
+  @FileUpload('image/jpeg')
+  @ApiOperation({ summary: 'Upload the profile photo' })
+  @ApiNoContentResponse()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async photoUpload(
+    @UploadedFile() file: Express.Multer.File,
+    @Request() request,
+  ) {
+    await this.userService.uploadPicture(file, request);
+  }
+
+  @Get('photo-download/:picturename')
+  @ApiBearerAuth()
+  @FileDownload('image/jpeg')
+  @ApiNoContentResponse()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async download(
+    @Param('picturename') pictureName: string,
+    @Res() response: Response,
+  ) {
+    const picturePathName = await this.userService.downloadPicture(pictureName);
+    response.contentType('image/jpeg');
+    response.attachment(picturePathName);
+    response.sendFile(picturePathName);
   }
 
   private async mapContent(

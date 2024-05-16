@@ -68,14 +68,14 @@ export class UserRepository {
     );
   }
 
-  async update(userId: number, userEntity: UserEntity) {
+  async update(userId: number, userData: any) {
     this.fetchById(userId);
     await this.prisma.$transaction([
       this.prisma.user.update({
         where: {
           id: userId,
         },
-        data: userEntity,
+        data: userData,
       }),
     ]);
   }

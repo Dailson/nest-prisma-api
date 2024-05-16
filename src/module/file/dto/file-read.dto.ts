@@ -1,5 +1,4 @@
 import { AutoMap } from '@automapper/classes';
-import { User } from '@prisma/client';
 
 export class FileReadDTO {
   @AutoMap()
@@ -7,16 +6,4 @@ export class FileReadDTO {
 
   @AutoMap()
   fileName: string;
-
-  @AutoMap()
-  contentLength: number;
-
-  @AutoMap()
-  contentType: string;
-
-  @AutoMap()
-  url: string;
-
-  @AutoMap()
-  user: User;
 }

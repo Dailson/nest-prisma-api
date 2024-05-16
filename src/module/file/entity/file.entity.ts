@@ -4,24 +4,23 @@ export class FileEntity implements File {
   @AutoMap()
   id: number;
 
-  @AutoMap()
-  file_name: string;
+  originalName: string;
 
   @AutoMap()
-  content_length: number;
+  fileName: string;
 
   @AutoMap()
-  content_type: string;
+  contentLength: number;
 
   @AutoMap()
-  url: string;
+  contentType: string;
 
   @AutoMap()
-  user_id: number;
+  userId: number;
 
   @AutoMap()
-  created_at: Date;
+  createdAt: Date;
 
   @AutoMap()
-  updated_at: Date;
+  updatedAt: Date;
 }

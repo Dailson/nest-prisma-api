@@ -21,19 +21,19 @@ export class ArticleReadDTO {
 
   @ApiProperty()
   @AutoMap()
-  is_published: boolean;
+  isPublished: boolean;
 
   @ApiProperty()
   @AutoMap()
-  author_id: number;
+  authorId: number;
 
   @ApiProperty()
   @AutoMap()
-  created_at: Date;
+  createdAt: Date;
 
   @ApiProperty()
   @AutoMap()
-  updated_at: Date;
+  updatedAt: Date;
 
   @ApiProperty()
   @AutoMap(() => [UserReadDTO])

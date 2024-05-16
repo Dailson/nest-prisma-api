@@ -14,43 +14,42 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(255)
-  last_name String?   @db.VarChar(255)
-  email     String    @unique @db.VarChar(255)
-  password  String    @db.VarChar(255)
-  role      String    @default("USER") @db.VarChar(255)
-  photo_url String?
-  articles  Article[]
-  File      File[]
+  id         Int       @id @default(autoincrement())
+  fullName   String    @map("full_name") @db.VarChar(255)
+  email      String    @unique @db.VarChar(255)
+  password   String    @db.VarChar(255)
+  role       String    @default("USER") @db.VarChar(255)
+  pictureUrl String?   @map("picture_url")
+  articles   Article[]
+  File       File[]
 
   @@map("tb_user")
 }
 
 model Article {
-  id           Int      @id @default(autoincrement())
-  title        String   @unique @db.VarChar(255)
-  description  String?  @db.VarChar(255)
-  body         String
-  is_published Boolean  @default(false) @db.Bit
-  author       User?    @relation(fields: [author_id], references: [id])
-  author_id    Int?
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  title       String   @unique @db.VarChar(255)
+  description String?  @db.VarChar(255)
+  body        String
+  isPublished Boolean  @default(false) @map("is_published") @db.Bit
+  author      User?    @relation(fields: [authorId], references: [id])
+  authorId    Int?     @map("author_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("tb_article")
 }
 
 model File {
-  id             Int      @id @default(autoincrement())
-  file_name      String   @unique @db.VarChar(255)
-  content_length Int
-  content_type   String
-  url            String
-  user           User     @relation(fields: [user_id], references: [id])
-  user_id        Int
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  originalName  String   @map("original_name") @db.VarChar(255)
+  fileName      String   @map("file_name") @db.VarChar(255)
+  contentLength Int      @map("content_length")
+  contentType   String   @map("content_type")
+  user          User     @relation(fields: [userId], references: [id])
+  userId        Int      @map("user_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   @@map("tb_file")
 }

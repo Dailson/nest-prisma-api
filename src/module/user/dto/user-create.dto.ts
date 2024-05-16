@@ -1,17 +1,12 @@
 import { AutoMap } from '@automapper/classes';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class UserCreateDTO {
   @ApiProperty()
   @IsNotEmpty()
   @AutoMap()
-  name: string;
-
-  @ApiProperty()
-  @IsString()
-  @AutoMap()
-  last_name: string;
+  fullName: string;
 
   @ApiProperty()
   @IsEmail()
