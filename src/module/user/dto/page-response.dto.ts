@@ -1,10 +1,24 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { ApplicationConstants } from '../../../const/page-constant';
+
 export class PageResponseDTO<T> {
+  @ApiProperty({ default: ApplicationConstants.DEFAULT_PAGE })
   page: number;
+
+  @ApiProperty({ default: ApplicationConstants.DEFAULT_PAGE_SIZE })
   size: number;
+
+  @ApiProperty()
   totalPages: number;
+
+  @ApiProperty()
   totalItems: number;
+
+  @ApiProperty()
   last: boolean;
-  content: T[];
+
+  @ApiProperty()
+  results: T[];
 
   constructor(
     page: number,
@@ -19,6 +33,6 @@ export class PageResponseDTO<T> {
     this.totalPages = totalPages;
     this.totalItems = totalItems;
     this.last = last;
-    this.content = content;
+    this.results = content;
   }
 }

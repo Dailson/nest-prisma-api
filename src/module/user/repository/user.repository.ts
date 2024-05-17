@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Page } from '../../../const/page-constant';
+
 import { PrismaService } from '../../../prisma/prisma.service';
 import { PageResponseDTO } from '../dto/page-response.dto';
 import { UserEntity } from '../entity/user.entity';
@@ -39,20 +39,19 @@ export class UserRepository {
   async fetchAllPaged(
     page?: number,
     size?: number,
+    orderBy?: string,
+    direction?: string,
   ): Promise<PageResponseDTO<UserEntity>> {
-    if (Number.isNaN(page)) {
-      page = Page.DEFAULT_PAGE;
-    }
-    if (Number.isNaN(size)) {
-      size = Page.DEFAULT_PAGE_SIZE;
-    }
-
-    const content = await this.prisma.user.findMany({
-      take: size,
-      skip: (page - 1) * size,
-    });
-
-    const totalItems = await this.prisma.user.count();
+    const [totalItems, content] = await this.prisma.$transaction([
+      this.prisma.user.count(),
+      this.prisma.user.findMany({
+        take: size,
+        skip: (page - 1) * size,
+        orderBy: {
+          [orderBy]: direction,
+        },
+      }),
+    ]);
 
     const totalPages = Math.ceil(totalItems / size);
 

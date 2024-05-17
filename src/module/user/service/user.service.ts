@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { genSalt, hashSync } from 'bcrypt';
-import { PrismaService } from '../../../prisma/prisma.service';
 import { FileService } from '../../file/file.service';
 import { PageResponseDTO } from '../dto/page-response.dto';
 import { UserEntity } from '../entity/user.entity';
@@ -9,7 +8,6 @@ import { UserRepository } from '../repository/user.repository';
 @Injectable()
 export class UserService {
   constructor(
-    private readonly prisma: PrismaService,
     private readonly fileService: FileService,
     private readonly userRepository: UserRepository,
   ) {}
@@ -34,8 +32,15 @@ export class UserService {
   async fetchAllPaged(
     page?: number,
     size?: number,
+    orderBy?: string,
+    direction?: string,
   ): Promise<PageResponseDTO<UserEntity>> {
-    return await this.userRepository.fetchAllPaged(page, size);
+    return await this.userRepository.fetchAllPaged(
+      page,
+      size,
+      orderBy,
+      direction,
+    );
   }
 
   async update(userId: number, userData: any) {

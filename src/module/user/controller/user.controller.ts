@@ -21,13 +21,13 @@ import {
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { Response } from 'express';
 import { FileDownload } from '../../../decorator/file-download.decorator';
 import { FileUpload } from '../../../decorator/file-upload.decorator';
-import { Roles } from '../../auth/decorator/role.decorator';
+import { OrderFilterDTO } from '../dto/order-filter.dto';
+import { PageFilterDTO } from '../dto/page-filter.dto';
 import { PageResponseDTO } from '../dto/page-response.dto';
 import { UserCreateDTO } from '../dto/user-create.dto';
 import { UserReadDTO } from '../dto/user-read.dto';
@@ -45,7 +45,7 @@ export class UserController {
   ) {}
 
   @Post()
-  @ApiOperation({ summary: 'Creates a single User' })
+  @ApiOperation({ summary: 'Create a single record of User' })
   @ApiCreatedResponse({ type: UserCreateDTO })
   @ApiBearerAuth()
   async create(@Body() userCreateDTO: UserCreateDTO) {
@@ -58,7 +58,7 @@ export class UserController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Returns an array of Users' })
+  @ApiOperation({ summary: 'Search all User records' })
   @ApiOkResponse({ type: UserReadDTO, isArray: true })
   @ApiBearerAuth()
   async fetchAll(): Promise<UserReadDTO[] | undefined[]> {
@@ -67,15 +67,20 @@ export class UserController {
   }
 
   @Get('/paged')
-  @ApiQuery({ name: 'page', required: false, type: Number })
-  @ApiQuery({ name: 'size', required: false, type: Number })
+  @ApiOperation({ summary: 'Seach all User records in a paginated manner' })
+  @ApiOkResponse({ type: PageResponseDTO<UserReadDTO> })
   async fetchAllPaged(
-    @Query('page') page?: number,
-    @Query('size') size?: number,
-  ): Promise<PageResponseDTO<UserReadDTO>> {
-    const pageResult = this.userService.fetchAllPaged(page, size);
+    @Query() pageFilter?: PageFilterDTO,
+    @Query() orderField?: OrderFilterDTO,
+  ) {
+    const pageResult = this.userService.fetchAllPaged(
+      pageFilter.page,
+      pageFilter.size,
+      orderField.orderBy,
+      orderField.direction,
+    );
     const mappedContent = await this.userMapper.mapArrayAsync(
-      (await pageResult).content,
+      (await pageResult).results,
       UserEntity,
       UserReadDTO,
     );
@@ -83,7 +88,9 @@ export class UserController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Returns a single User' })
+  @ApiOperation({
+    summary: 'Search a single User record by its primary key id',
+  })
   @ApiOkResponse({ type: UserReadDTO })
   @ApiBearerAuth()
   async fetchById(@Param('id') id: number): Promise<UserReadDTO> {
@@ -92,7 +99,9 @@ export class UserController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Updates a single User' })
+  @ApiOperation({
+    summary: 'Update a single User record by its primary key id',
+  })
   @ApiNoContentResponse()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
@@ -106,11 +115,12 @@ export class UserController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Deletes a single User' })
+  @ApiOperation({
+    summary: 'Deletes a single User record by its primary key id',
+  })
   @ApiNoContentResponse()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
-  @Roles('ADMIN')
   async delete(@Param('id') id: number) {
     await this.userService.delete(id);
   }
@@ -118,7 +128,7 @@ export class UserController {
   @Post('/photo-upload')
   @ApiBearerAuth()
   @FileUpload('image/jpeg')
-  @ApiOperation({ summary: 'Upload the profile photo' })
+  @ApiOperation({ summary: 'Upload a user profile pricture' })
   @ApiNoContentResponse()
   @HttpCode(HttpStatus.NO_CONTENT)
   async photoUpload(
@@ -130,6 +140,7 @@ export class UserController {
 
   @Get('photo-download/:picturename')
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Download a user profile pricture' })
   @FileDownload('image/jpeg')
   @ApiOkResponse()
   async download(

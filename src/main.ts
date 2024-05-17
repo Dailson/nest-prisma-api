@@ -15,7 +15,6 @@ async function bootstrap() {
     new ValidationPipe({
       transform: true, // Convert the requet to the approriate object
       whitelist: true, // Only declaread properties on DTO are permited
-      forbidNonWhitelisted: true, // If an extra property is passed, it throw an error
     }),
   );
 
