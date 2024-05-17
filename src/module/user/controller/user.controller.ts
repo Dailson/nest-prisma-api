@@ -131,15 +131,14 @@ export class UserController {
   @Get('photo-download/:picturename')
   @ApiBearerAuth()
   @FileDownload('image/jpeg')
-  @ApiNoContentResponse()
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOkResponse()
   async download(
     @Param('picturename') pictureName: string,
     @Res() response: Response,
   ) {
     const picturePathName = await this.userService.downloadPicture(pictureName);
     response.contentType('image/jpeg');
-    response.attachment(picturePathName);
+    response.attachment(pictureName);
     response.sendFile(picturePathName);
   }
 

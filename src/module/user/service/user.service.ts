@@ -53,7 +53,7 @@ export class UserService {
     });
   }
 
-  async downloadPicture(pictureName: string) {
+  async downloadPicture(pictureName: string): Promise<string> {
     return await this.fileService.download(pictureName);
   }
 
